@@ -1,4 +1,6 @@
 import segmentation_models_pytorch as smp
+import torch
+import matplotlib.pyplot as plt
 
 BEST_MODEL_PATH = './best_model.pth'
 
@@ -102,9 +104,9 @@ def train(model, loss, metrics, goal_metric, goal_comparison, optimizer, device,
 
             if epoch % scheduled_epochs == 0 and epoch != 0:
 
-                current_lr = optimizer.param_group[0]['lr']
+                current_lr = optimizer.param_groups[0]['lr']
                 new_lr = current_lr*0.1
-                optimizer.param_group[0]['lr'] = new_lr
+                optimizer.param_groups[0]['lr'] = new_lr
                 print(f'Learning rate lowered to {new_lr} on epoch {epoch}!')
         
         #----------------------------------------------------------------------

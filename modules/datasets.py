@@ -2,6 +2,7 @@ from torch.utils.data import Dataset
 import os
 import cv2
 import matplotlib.pyplot as plt
+import numpy as np
 
 class CustomDataset(Dataset):
     """
@@ -23,11 +24,16 @@ class CustomDataset(Dataset):
         self.augmentation = augmentation
         self.preprocessing = preprocessing
 
+        self.class_values=[255]
+
     def __getitem__(self, i):
 
         image = cv2.imread(self.images[i])
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         mask = cv2.imread(self.masks[i], 0)
+
+        masks = [(mask == v) for v in self.class_values]
+        mask = np.stack(masks, axis=-1).astype('float')
 
         if self.augmentation:
             result = self.augmentation(image=image, mask=mask)
